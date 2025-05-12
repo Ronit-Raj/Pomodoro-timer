@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from "react"
-import "/play.svg?url"
-import "/pause.svg?url"
+import "/play-break.svg?url"
+import "/pause-break.svg?url"
+import "/play-work.svg?url"
+import "/pause-work.svg?url"
 
-const startTime={
-    hour:2,
-    min:30,
-    sec:30
-}
 
-function Timer(){
-    const [time,setTime]=useState(startTime)
+function Timer(props){
+    const [time,setTime]=useState(props.startTime)
     const [running,setRunning]=useState(false)
     const runningRef = useRef(running)
     const clockRef=useRef(null)
+    let pauseSvg=(props.type==='break'?'pause-break.svg':'pause-work.svg')
+    let playSvg=(props.type==='break'?'play-break.svg':'play-work.svg')
+    let borderColorClass=(props.type==='break'?'border-[#66bb6a]':'border-[#4fc3f7]')
+    let color=(props.type==='break'?'#66bb6a':'#4fc3f7')
+    // clockRef.current?.classList.add(`border-[${color}]`)
 
     useEffect(()=>{
         runningRef.current=running
@@ -39,8 +41,8 @@ function Timer(){
                     setRunning(false)
                 }
                 
-                let complete=((startTime.hour*3600-newTime.hour*3600 + startTime.min*60-newTime.min*60 + startTime.sec-newTime.sec)/(startTime.hour*3600 + startTime.min*60 + startTime.sec))*360;
-                clockRef.current.style.backgroundImage=`conic-gradient(#0ea5e9 0deg ${Math.ceil(complete)}deg, transparent ${Math.ceil(complete)}deg)`;
+                let complete=((props.startTime.hour*3600-newTime.hour*3600 + props.startTime.min*60-newTime.min*60 + props.startTime.sec-newTime.sec)/(props.startTime.hour*3600 + props.startTime.min*60 + props.startTime.sec))*360;
+                clockRef.current.style.backgroundImage=`conic-gradient(${color} 0deg ${Math.ceil(complete)}deg, transparent ${Math.ceil(complete)}deg)`;
                 return newTime
             })
         }, 1000);
@@ -51,12 +53,12 @@ function Timer(){
 
     return (
         <div className="border flex justify-center items-center flex-col w-48 h-72 rounded-2xl">
-            <div className="text-white rounded-full mb-8 border-sky-500 font-extrabold  border-4 size-36 flex justify-center items-center"
+            <div className={`text-white rounded-full mb-8  font-extrabold ${borderColorClass} border-4 size-36 flex justify-center items-center`}
                 ref={clockRef}>
                 {time.hour}:{time.min}:{time.sec}
             </div>
-            <button className="size-6 " onClick={()=>setRunning(!running)}>
-                {running ? <img src="pause.svg"></img> : <img src="play.svg"></img>}
+            <button className="size-12 border-2 rounded-full flex justify-center items-center" onClick={()=>setRunning(!running)}>
+                {running ? <img  className="size-6" src={pauseSvg}></img> : <img className="size-6" src={playSvg}></img>}
             </button>
         </div>
     )
