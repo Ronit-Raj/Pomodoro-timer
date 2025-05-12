@@ -50,12 +50,19 @@ function Timer(props){
         return () => clearInterval(id)
     },[])
     
+    function toTwoDigit(num){
+        let temp=num.toString()
+        if(temp.length==2)
+            return temp;
+        else
+            return "0"+temp;
+    }
 
     return (
-        <div className="border flex justify-center items-center flex-col w-48 h-72 rounded-2xl">
-            <div className={`text-white rounded-full mb-8  font-extrabold ${borderColorClass} border-4 size-36 flex justify-center items-center`}
+        <div className="border flex justify-center items-center flex-col w-2/3 h-2/3 rounded-3xl m-4">
+            <div className={`text-white text-3xl rounded-full mb-8  font-extrabold ${borderColorClass} border-4 aspect-square w-2/3 flex justify-center items-center`}
                 ref={clockRef}>
-                {time.hour}:{time.min}:{time.sec}
+                {toTwoDigit(time.hour)}:{toTwoDigit(time.min)}:{toTwoDigit(time.sec)}
             </div>
             <button className="size-12 border-2 rounded-full flex justify-center items-center" onClick={()=>setRunning(!running)}>
                 {running ? <img  className="size-6" src={pauseSvg}></img> : <img className="size-6" src={playSvg}></img>}
