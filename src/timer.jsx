@@ -59,7 +59,7 @@ function Timer(props){
     }
 
     return (
-        <div className="border flex justify-center items-center flex-col w-2/3 h-2/3 rounded-3xl m-4">
+        <div className="border flex justify-center items-center flex-col w-2/3 h-2/3 rounded-2xl m-4">
             <div className={`text-white text-3xl rounded-full mb-8  font-extrabold ${borderColorClass} border-4 aspect-square w-2/3 flex justify-center items-center`}
                 ref={clockRef}>
                 {toTwoDigit(time.hour)}:{toTwoDigit(time.min)}:{toTwoDigit(time.sec)}
