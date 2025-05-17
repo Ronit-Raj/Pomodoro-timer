@@ -8,6 +8,8 @@ import "/pause-work.svg?url"
 function Timer(props){
     const [time,setTime]=useState(props.startTime)
     const [running,setRunning]=useState(false)
+    const [completed,setCompleted]=useState(false)
+
     const runningRef = useRef(running)
     const clockRef=useRef(null)
     let pauseSvg=(props.type==='break'?'pause-break.svg':'pause-work.svg')
@@ -20,6 +22,14 @@ function Timer(props){
         runningRef.current=running
     },[running])
 
+    useEffect(()=>{
+        if(completed)
+            props.next()
+    },[completed])
+
+    useEffect(()=>{
+        setTime(props.startTime)
+    },[props.startTime])
     useEffect(()=>{
         const id=setInterval(() => {
             setTime((time)=>{
@@ -38,6 +48,8 @@ function Timer(props){
                     newTime.sec=59;
                 }
                 else{
+                    clockRef.current.style.backgroundImage=`none`;
+                    setCompleted(true)
                     setRunning(false)
                 }
                 
@@ -48,7 +60,7 @@ function Timer(props){
         }, 1000);
 
         return () => clearInterval(id)
-    },[])
+    },[pauseSvg,playSvg,color,borderColorClass])
     
     function toTwoDigit(num){
         let temp=num.toString()

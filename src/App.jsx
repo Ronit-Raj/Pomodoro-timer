@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Timer from './Timer.jsx'
 import TopBar from './TopBar.jsx'
 import Scheduler from './Scheduler.jsx'
 
-const defaultWorkTime={hour:0,min:45,sec:0}
+const defaultWorkTime={hour:0,min:0,sec:5}
 const dafaultBreak={hour:0,min:5,sec:0}
 const defaultLongBreak={hour:0,min:15,sec:0}
 const defaultSchedule=[
@@ -15,9 +15,10 @@ const defaultSchedule=[
 ]
 
 function App() {
-  const [sessionType,setSessionType]=useState("work") //current session 
-  const [sessionTime,setSessionTime]=useState({hour:0,min:0,sec:10}) //time for current session 
   const [sessions,setSessions]=useState(defaultSchedule) //an array to denote the entire schedule 
+//   const [sessionType,setSessionType]=useState(sessions[0].type) //current session 
+//   const [sessionTime,setSessionTime]=useState(sessions[0].time) //time for current session 
+
 
   function addWork(time=defaultWorkTime){
       setSessions([
@@ -53,13 +54,23 @@ function App() {
       }
   }
 
+  function nextSession(){
+    console.log('next session started ');
+    if(sessions.length==0)
+        ;
+    else{
+        setSessions((sessions)=>sessions.filter((_,index)=>index !== 0))
+        // setSessionTime((_)=>sessions[0].time)
+        // setSessionType((_)=>sessions[0].type)
+    }
+  }
 
   return (
     <div className='flex items-center flex-col  min-h-screen'>
       <TopBar/>
       <div className='grid grid-cols-10 flex-1 w-screen'>
             <div className='col-span-3 flex justify-center items-center '>
-              <Timer type={sessionType} startTime={sessionTime}/>
+              <Timer type={sessions[0].type} startTime={sessions[0].time} next={nextSession}/>
             </div>
             <div className='col-span-7 flex justify-center items-center'>
                 <Scheduler/>
