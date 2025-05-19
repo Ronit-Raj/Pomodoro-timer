@@ -23,8 +23,20 @@ function Timer(props){
     },[running])
 
     useEffect(()=>{
-        if(completed)
-            props.next()
+        if(!completed){
+            return 
+        }
+        // Clear the gradient
+        clockRef.current.style.backgroundImage = "none";
+        setRunning(false);
+
+        // Let the browser paint the cleared background…
+        const tid = window.requestAnimationFrame(() => {
+        // …then move on to the next session
+        props.next();
+        });
+
+        return () => window.cancelAnimationFrame(tid);
     },[completed])
 
     useEffect(()=>{
